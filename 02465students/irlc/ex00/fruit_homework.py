@@ -1,7 +1,7 @@
 # This file may not be shared/redistributed without permission. Please read copyright notice in the git repo. If this file contains other copyright notices disregard this text.
 def add(a, b): 
     """  This function shuold return the sum of a and b. I.e. if print(add(2,3)) should print '5'. """
-    print("Alen")
+    return a+b
     # TODO: 1 lines missing.
     raise NotImplementedError("Implement function body")
 
@@ -10,7 +10,10 @@ def misterfy(animals : list[str]) -> list[str]:
     Given a list of animals like animals=["cat", "wolf", "elephans"], this function should return
     a list like ["mr cat", "mr wolf", "mr elephant"]  """
     # TODO: 1 lines missing.
-    raise NotImplementedError("Implement function body")
+    animals2 = []
+    for animal in animals:
+        animals2.append("mr " + animal)
+    return animals2
 
 def mean_value(p_dict : dict) -> float: 
     """
