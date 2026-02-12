@@ -18,14 +18,18 @@ class InventoryEnvironment(Env):
     def step(self, a):
         w = np.random.choice(3, p=(.1, .7, .2))    # Generate random disturbance
         # TODO: 5 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
-        return s_next, reward, terminated, False, {}  # return transition information  
+        s_next = max(0, min(2, self.s - w + a))  # x_{k+1} = f_k(x_k, u_k, w_k)
+        reward = -(a + (self.s + a - w) ** 2)    # reward = -cost
+        terminated = self.k == self.N - 1        # Have we terminated?
+        self.s = s_next                          # update environment state
+        self.k += 1                              # update current time step
+        return s_next, reward, terminated, False, {}
 
 class RandomAgent(Agent): 
     def pi(self, s, k, info=None): 
         """ Return action to take in state s at time step k """
         # TODO: 1 lines missing.
-        raise NotImplementedError("Implement function body")
+        return self.env.action_space.sample()
 
 
 def simplified_train(env: Env, agent: Agent) -> float: 
@@ -34,14 +38,15 @@ def simplified_train(env: Env, agent: Agent) -> float:
     for k in range(1000):
         ## TODO: Oy veh, the following 7 lines below have been permuted. Uncomment, rearrange to the correct order and remove the error.
         #-------------------------------------------------------------------------------------------------------------------------------
-        # if terminated or truncated:
-        # sp, r, terminated, truncated, metadata = env.step(a)
-        # a = agent.pi(s, k) 
-        # s = sp
-        # J += r
-        # agent.train(s, a, sp, r, terminated)
-        #     break 
-        raise NotImplementedError("Remove this exception after the above lines have been uncommented and rearranged.")
+        a = agent.pi(s, k)
+        sp, r, terminated, truncated, metadata = env.step(a) 
+
+        agent.train(s, a, sp, r, terminated)
+        s = sp
+        J += r
+        if terminated or truncated:    
+            break 
+        
     return J 
 
 def run_inventory():
