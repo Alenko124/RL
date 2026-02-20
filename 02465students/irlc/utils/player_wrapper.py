@@ -74,10 +74,11 @@ HUMAN_DEMAND_RESET = "reset env."
 
 async def _webassembly_interactive(env, agent, autoplay=False):
     from pygame import gfxdraw
+    import types
 
-    if not hasattr(agent, 'reset'):
+    if not hasattr(agent, "reset"):
         from irlc.lectures.lec10.utils import agent_reset
-        agent.reset = lambda self: agent_reset(self)
+        agent.reset = types.MethodType(agent_reset, agent)
 
 
     def aapolygon(surface, points, color):
@@ -113,12 +114,12 @@ async def _webassembly_interactive(env, agent, autoplay=False):
     while running:
         pi_action = agent.pi(s, k, info)
         a = None
+        truncated = False
         while True:
             for event in pygame.event.get():
-                # if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-                #     print("Resetting the environment")
-                #     a = HUMAN_DEMAND_RESET
-                #     break
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                    print("Resetting the environment")
+                    truncated = True
 
                 a = agent._resolve_event_into_action(event=event, pi_action=pi_action, info=info)
                 if a is not None:
@@ -133,10 +134,9 @@ async def _webassembly_interactive(env, agent, autoplay=False):
         # if not isinstance(a, np.ndarray) and isinstance(a, str) and a == HUMAN_DEMAND_RESET:
         #     s, info = env.reset()
         #     continue
-
-        sp, reward, done, truncated, info_sp = (await env.async_step(a)) if hasattr(env, 'async_step') else env.step(a)
-
-        agent.train(s, a, reward, sp, done=done, info_s=info, info_sp=info_sp)
+        if not truncated:
+            sp, reward, done, truncated, info_sp = (await env.async_step(a)) if hasattr(env, 'async_step') else env.step(a)
+            agent.train(s, a, reward, sp, done=done, info_s=info, info_sp=info_sp)
 
         step = step + 1
         k = k + 1
