@@ -51,7 +51,7 @@ def DP_stochastic(model: DPModel) -> tuple[list[dict], list[dict]]:
             Then you can use this to update J[k][x] = Q_umin and pi[k][x] = umin.
             """
             # TODO: 4 lines missing.
-            raise NotImplementedError("Insert your solution and remove this error.")
+            
             """
             After the above update it should be the case that:
 
