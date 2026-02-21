@@ -28,7 +28,7 @@ class InventoryDPModel(DPModel):
 
     def Pw(self, x, u, k): # Distribution over random disturbances 
         # TODO: 1 lines missing.
-        raise NotImplementedError("Implement function body")
+        return {0: 0.1, 1: 0.7, 2: 0.2}
 
     def gN(self, x):
         return 0 

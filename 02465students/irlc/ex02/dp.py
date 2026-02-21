@@ -50,7 +50,25 @@ def DP_stochastic(model: DPModel) -> tuple[list[dict], list[dict]]:
             (for help, google: `python find key in dictionary with minimum value').
             Then you can use this to update J[k][x] = Q_umin and pi[k][x] = umin.
             """
-            # TODO: 4 lines missing.
+            Q = {}
+
+            for u in model.A(x, k):
+
+                expected_cost = 0
+
+                for w, pw in model.Pw(x, u, k).items():   # pw = P(w | x,u,k)
+
+                    x_next = model.f(x, u, w, k)
+                    stage_cost = model.g(x, u, w, k)
+
+                    expected_cost += pw * (stage_cost + J[k+1][x_next])
+
+                Q[u] = expected_cost
+
+            umin = min(Q, key=Q.get)
+
+            J[k][x] = Q[umin]
+            pi[k][x] = umin
             
             """
             After the above update it should be the case that:
