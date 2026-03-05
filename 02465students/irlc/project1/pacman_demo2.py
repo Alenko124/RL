@@ -4,7 +4,7 @@ from irlc.project1.pacman import east, datadiscs, SS1tiny, SS2tiny
 from irlc import interactive, savepdf, Agent, train
 
 if __name__ == "__main__":
-    env = PacmanEnvironment(layout_str=datadiscs, render_mode='human')
+    env = PacmanEnvironment(layout_str=SS1tiny, render_mode='human')
     env, agent = interactive(env, Agent(env))
     stats, trajectory = train(env, agent, num_episodes=1)
     print("First state was\n", trajectory[0].state[0])
