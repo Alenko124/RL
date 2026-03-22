@@ -203,8 +203,7 @@ class SymMap:
         if len(dx) < 1:
             raise Exception("Cannot find map position. Is the map empty?")
         try:
-            #i = int(np.where(np.squeeze(index))[0])
-            i = np.where(np.squeeze(index))[0][0]
+            i = int(np.where(np.squeeze(index))[0])
         except Exception as e:
             print(e)
 
