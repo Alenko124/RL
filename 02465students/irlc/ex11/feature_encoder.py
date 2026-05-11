@@ -174,7 +174,7 @@ class FeatureEncoder:
         :param a: An action :math:`a`
         :return: Feature vector :math:`x(s,a)`
         """
-        return self.x(s, a) @ self.w
+        return float(self.x(s, a) @ self.w) # ja mijenjaoooooooooooo
 
     def __getitem__(self, item):
         raise Exception("Hi! You tried to access linear Q-values as Q[s,a]. You need to use Q(s,a). This choice signifies they are not represented as a table, but as a linear combination x(s,a)^T w")

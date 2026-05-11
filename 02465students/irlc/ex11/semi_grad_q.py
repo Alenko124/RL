@@ -27,7 +27,9 @@ class LinearSemiGradQAgent(QAgent):
         if done:
             target = r
         else:
-            target = r + self.gamma * max(self.Q(sp, ap) for ap in self.env.action_space)
+            target = r + self.gamma * max(
+                self.Q(sp, ap) for ap in range(self.env.action_space.n)
+            )
 
         delta = target - self.Q(s, a)
 

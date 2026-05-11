@@ -1,0 +1,130 @@
+\documentclass[12pt,twoside]{article}
+%\usepackage[table]{xcolor} % important to avoid options clash.
+%\input{02465shared_preamble}
+%\usepackage{cleveref}
+\usepackage{url}
+\usepackage{graphics}
+\usepackage{multicol}
+\usepackage{rotate}
+\usepackage{rotating}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{pifont}
+\usepackage{latexsym}
+\usepackage[english]{babel}
+\usepackage{epstopdf}
+\usepackage{etoolbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow,epstopdf}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\newcommand\redt[1]{ {\textcolor[rgb]{0.60, 0.00, 0.00}{\textbf{ #1} } } }
+
+
+\newcommand{\m}[1]{\boldsymbol{ #1}}
+\newcommand{\EE}{\mathbb{E}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\yoursolution}{ \redt{(your solution here) } } 
+
+
+
+\title{ Report 3 hand-in }
+\date{ \today }
+\author{Alen Hodzic(\texttt{s253790})} 
+
+\begin{document}
+\maketitle
+
+\begin{table}[ht!]
+\caption{Attribution table.}
+\begin{tabular}{llll}
+\toprule
+                                                                           & Alen Hodzic  &  &  \\
+\midrule
+ 1: Optimal policy                                                         & 100\%  &  &  \\
+ 2: Simulating a finite approximation of the optimal action-value function & 100\%  &  &  \\
+ 3: Analytically computing the optimal action-value function               & 100\%  &  &  \\
+ 4: Extend solution to all states and actions                              & 100\%  &  &  \\
+ 5: Modified reward function                                               & 100\%  &  &  \\
+ 6: Long bridge                                                            & 100\%  &  &  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%\paragraph{Statement about collaboration:}
+%Please edit this section to reflect how you have used external resources. The following statement will in most cases suffice: 
+%\emph{The code in the irls/project1 directory is entirely}
+
+%\paragraph{Main report:}
+Headings have been inserted in the document for readability. You only have to edit the part which says \yoursolution. 
+
+\section{Jar-Jar at the battle of Naboo (\texttt{jarjar.py})}
+\subsubsection*{{\color{red}Problem 3:  Analytically computing the optimal action-value function}}
+	
+Using the Bellman optimality equations, we obtain
+\begin{align}
+Q^*(0,1) & = \gamma Q^*(1,-1) \\
+Q^*(1,-1) & = -1 + \gamma Q^*(0,1)
+\end{align}
+therefore,
+\begin{align}
+Q^*(0,1) & = \frac{-\gamma}{1 - \gamma^2} \\
+Q^*(1,-1) & = \frac{-1}{1 - \gamma^2}
+\end{align}
+	
+\subsubsection*{{\color{red}Problem 5:  Modified reward function}}
+	
+Using the Bellman equation, we can write for both actions:
+\begin{align}
+v_\pi(s) &= p \big(r_0 + \gamma v_\pi(s+1)\big)
++ (1-p)\big(2r_0 + \gamma v_\pi(s+2)\big), \\
+v_\pi(s) &= p \big(r_0 + \gamma v_\pi(s-1)\big)
++ (1-p)\big(2r_0 + \gamma v_\pi(s-2)\big).
+\end{align}
+Since the reward is independent of the state, the value function does not depend on $s$, i.e. $v_\pi(s)=v$. Therefore,
+\begin{align}
+v &= p(r_0 + \gamma v) + (1-p)(2r_0 + \gamma v) \\
+  &= r_0(2 - p) + \gamma v,
+\end{align}
+which gives
+\begin{align}
+v_\pi(s) = \frac{r_0(2 - p)}{1 - \gamma}.
+\end{align}
+
+\section{Optimal escape}
+\subsubsection*{{\color{red}Problem 6:  Long bridge}}
+	
+Because the per-step reward satisfies $r_0 < 0$, any unnecessary movement (e.g., moving back and forth) will only decrease the total return. Therefore, the optimal policy will move directly towards one of the exits, either left or right.
+
+If we go left, we need $n$ steps to reach the terminal state. The total return is
+\begin{align}
+V_{\text{left}} &= r_0 + \gamma r_0 + \gamma^2 r_0 + \cdots + \gamma^{n-1} r_0 + \gamma^n \cdot 1.
+\end{align}
+Using the formula for the sum of a geometric series, this becomes
+\begin{align}
+V_{\text{left}} = r_0 \frac{1 - \gamma^n}{1 - \gamma} + \gamma^n.
+\end{align}
+
+Similarly, if we go right, we need $m$ steps and obtain reward $2$ at the end:
+\begin{align}
+V_{\text{right}} &= r_0 + \gamma r_0 + \gamma^2 r_0 + \cdots + \gamma^{m-1} r_0 + \gamma^m \cdot 2 \\
+&= r_0 \frac{1 - \gamma^m}{1 - \gamma} + 2\gamma^m.
+\end{align}
+
+Therefore, if
+\begin{align}
+r_0 \frac{1 - \gamma^n}{1 - \gamma} + \gamma^n
+>
+r_0 \frac{1 - \gamma^m}{1 - \gamma} + 2\gamma^m
+\end{align}
+one should go left, if
+\begin{align}
+r_0 \frac{1 - \gamma^n}{1 - \gamma} + \gamma^n
+<
+r_0 \frac{1 - \gamma^m}{1 - \gamma} + 2\gamma^m
+\end{align}
+one should go right, and when the two expressions are equal it makes no difference.
+\end{document}

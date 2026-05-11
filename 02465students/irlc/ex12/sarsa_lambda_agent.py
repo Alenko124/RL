@@ -38,7 +38,7 @@ class SarsaLambdaAgent(SarsaAgent):
         # TODO: 1 lines missing.
         #raise NotImplementedError("Update the eligibility trace e(s,a) += 1")
         # Generate next action using epsilon-greedy policy
-        a_prime = self.pi_eps(sp)
+        a_prime = self.pi_eps(sp, info_sp)
 
         # Ordinary Sarsa TD error
         delta = r + self.gamma * self.Q[sp, a_prime] * (not done) - self.Q[s, a]
@@ -63,7 +63,7 @@ class SarsaLambdaAgent(SarsaAgent):
         return f"SarsaLambda_{self.gamma}_{self.epsilon}_{self.alpha}_{self.lamb}"
 
 if __name__ == "__main__":
-    envn = 'CliffWalking-v0'
+    envn = 'CliffWalking-v1'
     env = gym.make(envn)
 
     alpha =0.05

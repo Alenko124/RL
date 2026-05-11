@@ -20,7 +20,7 @@ class LinearSemiGradSarsa(LinearSemiGradQAgent):
     def pi(self, s, k, info=None): 
         # TODO: 1 lines missing.
         #raise NotImplementedError("Implement function body")
-        action = self.pi_eps(s)
+        action = self.pi_eps(s, info)
         return action
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None):
@@ -29,7 +29,7 @@ class LinearSemiGradSarsa(LinearSemiGradQAgent):
         if done:
             target = r
         else:
-            ap = self.pi_eps(sp)
+            ap = self.pi_eps(sp, info_sp)
             target = r + self.gamma * self.Q(sp, ap)
 
         delta = target - self.Q(s, a)
