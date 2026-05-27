@@ -1,7 +1,7 @@
 # This file may not be shared/redistributed without permission. Please read copyright notice in the git repo. If this file contains other copyright notices disregard this text.
 import os
 import numpy as np
-from pandas.api.types import is_numeric_dtype
+
 """
 Using the plotter:
 
@@ -134,21 +134,14 @@ def get_datasets(fpath, x, condition=None, smoothing_window=None, resample_key=N
         for d in datasets:
             nd = {}
             cols = d.columns.tolist()
-
             for c in cols:
                 if c == resample_key:
                     y = tnew
-
-                elif not is_numeric_dtype(d[c]):
-                    y = [d[c][0]] * len(tnew)
-
+                elif d[c].dtype == 'O':
+                    y = [ d[c][0] ] * len(tnew)
                 else:
-                    xp = np.asarray(d[resample_key], dtype=float)
-                    fp = np.asarray(d[c], dtype=float)
-
-                    y = np.interp(tnew, xp, fp, left=np.nan, right=np.nan)
+                    y = np.interp(tnew, d[resample_key].tolist(), d[c], left=np.nan, right=np.nan)
                     y = y.astype(d[c].dtype)
-
                 nd[c] = y
 
             ndata = pd.DataFrame(nd)
