@@ -1,16 +1,30 @@
+from numpy import argmax
+
+
 def a_greedy_policy(q_values : dict, state : int) -> int:
     # TODO: Code has been removed from here.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    #raise NotImplementedError("Insert your solution and remove this error.")
+    astar = argmax(q_values[s, a] for (s, a) in q_values if s == state) + 1
     return astar
 
 def b_update_single_q(alpha, gamma, q_values: dict, state : int, action : int, reward : float, next_state : int) -> float:
     # TODO: Code has been removed from here.
-    raise NotImplementedError("Insert your solution and remove this error.")
-    return updated_q
+    #raise NotImplementedError("Insert your solution and remove this error.")
+    target = reward + gamma * q_values[next_state, action]
+        
+        # update
+    q_values[state, action] += alpha * (target - q_values[state, action])
+    return q_values[state, action]
 
 def c_update_all_q(alpha, gamma, states_actions_rewards: list[tuple]) -> dict:
     # TODO: Code has been removed from here.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    #raise NotImplementedError("Insert your solution and remove this error.")
+    q_values = {}
+    for i in range(len(states_actions_rewards)-1):
+        state, action, reward = states_actions_rewards[i]
+        next_state, next_action, _ = states_actions_rewards[i+1]
+        target = reward + gamma * q_values.get((next_state, next_action), 0)
+        q_values[state, action] = q_values.get((state, action), 0) + alpha * (target - q_values.get((state, action), 0))
     return q_values
 
 
